@@ -1,0 +1,39 @@
+class Station extends Thread {
+    public void run() {
+        System.out.println(getName() + " started scanning.");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("Thread interrupted");
+        }
+
+        System.out.println(getName() + " completed scanning.");
+    }
+}
+
+class Main {
+    public static void main(String[] args)
+            throws InterruptedException {
+
+        System.out.println("ANSWER SCRIPT SCANNING");
+        System.out.println("----------------------");
+
+        Station t1 = new Station();
+        Station t2 = new Station();
+        Station t3 = new Station();
+        Station t4 = new Station();
+
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+
+        System.out.println("All stations completed.");
+    }
+}
