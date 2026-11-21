@@ -1,0 +1,33 @@
+class Main {
+    static boolean booked = false;
+    static int count = 0;
+
+    synchronized static void book() {
+        if (!booked) {
+            booked = true;
+            count++;
+            System.out.println("Seat booked successfully.");
+        } else {
+            System.out.println("Seat already booked.");
+        }
+    }
+
+    public static void main(String[] args)
+            throws InterruptedException {
+
+        System.out.println("CINEMA SEAT BOOKING");
+        System.out.println("-------------------");
+
+        Thread t1 = new Thread(() -> book());
+        Thread t2 = new Thread(() -> book());
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Total seats sold: " + count);
+        System.out.println("Booking process completed.");
+    }
+}
