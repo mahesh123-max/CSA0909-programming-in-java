@@ -1,0 +1,129 @@
+```java
+import java.util.*;
+
+public class Q4PharmacyMaps {
+
+    static volatile int result;
+
+    static String medicineCode(int i) {
+        return String.format("MED%06d", i);
+    }
+
+    static void test(int n) {
+
+        Map<String, Integer> hashMap = new HashMap<>();
+        Map<String, Integer> treeMap = new TreeMap<>();
+        Map<String, Integer> linkedMap = new LinkedHashMap<>();
+
+        // Insert medicines in reverse order
+        for (int i = n; i >= 1; i--) {
+
+            String code = medicineCode(i);
+            int stock = i * 10;
+
+            hashMap.put(code, stock);
+            treeMap.put(code, stock);
+            linkedMap.put(code, stock);
+        }
+
+        System.out.println("\nMEDICINE COUNT: " + n);
+
+        // 100,000 lookups in HashMap
+        long start = System.nanoTime();
+
+        int total = 0;
+
+        for (int i = 0; i < 100000; i++) {
+            total += hashMap.get(medicineCode((i % n) + 1));
+        }
+
+        long hashTime = System.nanoTime() - start;
+        result = total;
+
+        // 100,000 lookups in TreeMap
+        start = System.nanoTime();
+
+        total = 0;
+
+        for (int i = 0; i < 100000; i++) {
+            total += treeMap.get(medicineCode((i % n) + 1));
+        }
+
+        long treeTime = System.nanoTime() - start;
+        result = total;
+
+        // 100,000 lookups in LinkedHashMap
+        start = System.nanoTime();
+
+        total = 0;
+
+        for (int i = 0; i < 100000; i++) {
+            total += linkedMap.get(medicineCode((i % n) + 1));
+        }
+
+        long linkedTime = System.nanoTime() - start;
+        result = total;
+
+        // Code-order report
+        start = System.nanoTime();
+
+        StringBuilder codeReport = new StringBuilder();
+
+        for (String key : treeMap.keySet()) {
+            codeReport.append(key).append(" ");
+        }
+
+        long codeReportTime = System.nanoTime() - start;
+
+        // Insertion-order report
+        start = System.nanoTime();
+
+        StringBuilder insertionReport = new StringBuilder();
+
+        for (String key : linkedMap.keySet()) {
+            insertionReport.append(key).append(" ");
+        }
+
+        long insertionReportTime = System.nanoTime() - start;
+
+        System.out.println("100000 Lookups:");
+        System.out.printf("HashMap: %.3f ms%n", hashTime / 1e6);
+        System.out.printf("TreeMap: %.3f ms%n", treeTime / 1e6);
+        System.out.printf("LinkedHashMap: %.3f ms%n", linkedTime / 1e6);
+
+        System.out.println("\nReport Generation:");
+        System.out.printf("Code-order report (TreeMap): %.3f ms%n",
+                codeReportTime / 1e6);
+
+        System.out.printf("Insertion-order report (LinkedHashMap): %.3f ms%n",
+                insertionReportTime / 1e6);
+
+        System.out.println("\nFirst 5 Medicine Codes:");
+
+        System.out.println("HashMap: " +
+                firstFive(hashMap.keySet()));
+
+        System.out.println("TreeMap: " +
+                firstFive(treeMap.keySet()));
+
+        System.out.println("LinkedHashMap: " +
+                firstFive(linkedMap.keySet()));
+    }
+
+    static List<String> firstFive(Set<String> keys) {
+
+        List<String> list = new ArrayList<>(keys);
+
+        return list.subList(0, Math.min(5, list.size()));
+    }
+
+    public static void main(String[] args) {
+
+        test(1000);
+
+        test(10000);
+
+        test(50000);
+    }
+}
+```
