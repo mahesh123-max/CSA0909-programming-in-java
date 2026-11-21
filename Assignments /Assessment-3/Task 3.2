@@ -1,0 +1,27 @@
+import java.io.*;
+
+class Main {
+    public static void main(String[] args) {
+
+        System.out.println("DAILY SALES REPORT");
+        System.out.println("------------------");
+
+        try (BufferedReader br =
+                new BufferedReader(new FileReader("input.txt"))) {
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                System.out.println("Sales Data: " + line);
+            }
+
+            System.out.println("Report generated successfully.");
+
+        } catch (IOException e) {
+            System.out.println("File reading error.");
+        }
+
+        System.out.println("File closed automatically.");
+        System.out.println("Process completed.");
+    }
+}
