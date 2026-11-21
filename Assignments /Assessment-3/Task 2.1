@@ -1,0 +1,21 @@
+class ExamException extends Exception {
+    ExamException(String msg) {
+        super(msg);
+    }
+}
+
+public class ExamDemo {
+    public static void main(String[] args) {
+        try {
+            int size = 800;
+
+            if (size > 500)
+                throw new ExamException("File size exceeded");
+
+            System.out.println("Submission successful");
+
+        } catch (ExamException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
