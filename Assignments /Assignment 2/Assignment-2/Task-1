@@ -1,0 +1,96 @@
+public class Q1StringBenchmark {
+
+    static volatile int sink;
+
+    static String usingString(int tickets, int fields) {
+        String result = "";
+
+        for (int t = 0; t < tickets; t++) {
+            String ticket = "";
+
+            for (int f = 1; f <= fields; f++) {
+                ticket = ticket + "Field" + f + "=Value" + f + ";";
+            }
+
+            result = result + ticket;
+        }
+        return result;
+    }
+
+    static String usingBuilder(int tickets, int fields) {
+        StringBuilder result = new StringBuilder();
+
+        for (int t = 0; t < tickets; t++) {
+            StringBuilder ticket = new StringBuilder();
+
+            for (int f = 1; f <= fields; f++) {
+                ticket.append("Field").append(f)
+                      .append("=Value").append(f).append(';');
+            }
+
+            result.append(ticket);
+        }
+        return result.toString();
+    }
+
+    static String usingBuffer(int tickets, int fields) {
+        StringBuffer result = new StringBuffer();
+
+        for (int t = 0; t < tickets; t++) {
+            StringBuffer ticket = new StringBuffer();
+
+            for (int f = 1; f <= fields; f++) {
+                ticket.append("Field").append(f)
+                      .append("=Value").append(f).append(';');
+            }
+
+            result.append(ticket);
+        }
+        return result.toString();
+    }
+
+    static long measure(int choice, int tickets, int fields) {
+        long start = System.nanoTime();
+        String output;
+
+        if (choice == 1)
+            output = usingString(tickets, fields);
+        else if (choice == 2)
+            output = usingBuilder(tickets, fields);
+        else
+            output = usingBuffer(tickets, fields);
+
+        long time = System.nanoTime() - start;
+        sink = output.length();
+
+        return time;
+    }
+
+    static void test(String name, int tickets, int fields) {
+
+        System.out.println("\n" + name);
+
+        for (int choice = 1; choice <= 3; choice++) {
+
+            long total = 0;
+
+            for (int i = 0; i < 3; i++) {
+                total += measure(choice, tickets, fields);
+            }
+
+            System.out.printf("Method %d: %.3f ms%n",
+                    choice, total / 3.0 / 1000000);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        test("Workload 1", 1, 5);
+        test("Workload 2", 10000, 50);
+        test("Workload 3", 5000, 100);
+
+        System.out.println("\nString = 1");
+        System.out.println("StringBuilder = 2");
+        System.out.println("StringBuffer = 3");
+    }
+}
