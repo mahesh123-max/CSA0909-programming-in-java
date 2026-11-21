@@ -1,0 +1,31 @@
+class ScannerTask implements Runnable {
+    public void run() {
+        System.out.println(Thread.currentThread().getName()
+                + " is scanning scripts.");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("Thread interrupted");
+        }
+
+        System.out.println(Thread.currentThread().getName()
+                + " completed.");
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+
+        System.out.println("SCANNER STATION SYSTEM");
+        System.out.println("----------------------");
+
+        Thread t1 = new Thread(new ScannerTask(), "Station 1");
+        Thread t2 = new Thread(new ScannerTask(), "Station 2");
+
+        t1.start();
+        t2.start();
+
+        System.out.println("Scanning started.");
+    }
+}
