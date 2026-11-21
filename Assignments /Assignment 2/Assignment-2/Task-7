@@ -1,0 +1,65 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Main {
+
+    static class Patient {
+        String name;
+        int severity;
+
+        Patient(String name, int severity) {
+            this.name = name;
+            this.severity = severity;
+        }
+
+        public String toString() {
+            return name + "(S" + severity + ")";
+        }
+    }
+
+    Queue<Patient>[] queues = new Queue[5];
+
+    Main() {
+        for (int i = 0; i < 5; i++) {
+            queues[i] = new LinkedList<>();
+        }
+    }
+
+    void admit(String name, int severity) {
+        if (severity < 1 || severity > 5) {
+            System.out.println("Invalid severity");
+            return;
+        }
+
+        queues[severity - 1].add(new Patient(name, severity));
+    }
+
+    Patient next() {
+        for (int i = 0; i < 5; i++) {
+            if (!queues[i].isEmpty()) {
+                return queues[i].poll();
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+
+        Main er = new Main();
+
+        er.admit("Ravi", 3);
+        er.admit("Meena", 1);
+        er.admit("John", 3);
+        er.admit("Asha", 5);
+        er.admit("Kumar", 1);
+        er.admit("Lata", 2);
+
+        System.out.println("Redesigned Treatment Order:");
+
+        Patient p;
+
+        while ((p = er.next()) != null) {
+            System.out.println(p);
+        }
+    }
+}
