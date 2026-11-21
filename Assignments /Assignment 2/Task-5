@@ -1,0 +1,82 @@
+import java.util.*;
+
+class Team {
+    private String name;
+    private int points;
+    private int goalDiff;
+
+    public Team(String name, int points, int goalDiff) {
+        this.name = name;
+        this.points = points;
+        this.goalDiff = goalDiff;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public int getGoalDiff() {
+        return goalDiff;
+    }
+
+    public String toString() {
+        return name + "(" + points + "," + goalDiff + ")";
+    }
+}
+
+class Leaderboard<T> {
+    private List<T> items = new ArrayList<>();
+    private Comparator<? super T> order;
+
+    public Leaderboard(Comparator<? super T> order) {
+        this.order = order;
+    }
+
+    public void add(T item) {
+        items.add(item);
+    }
+
+    public List<T> ranking() {
+        List<T> result = new ArrayList<>(items);
+        result.sort(order);
+        return result;
+    }
+}
+
+public class Q5LeaderboardDemo {
+    public static void main(String[] args) {
+
+        Comparator<Team> teamOrder =
+            Comparator.comparingInt(Team::getPoints).reversed()
+            .thenComparing(
+                Comparator.comparingInt(Team::getGoalDiff).reversed()
+            )
+            .thenComparing(Team::getName);
+
+        Leaderboard<Team> board =
+            new Leaderboard<>(teamOrder);
+
+        board.add(new Team("Panthers", 9, 4));
+        board.add(new Team("Cobras", 6, 1));
+        board.add(new Team("Bisons", 9, 4));
+        board.add(new Team("Eagles", 9, 6));
+
+        System.out.println("Team Rankings:");
+        System.out.println(board.ranking());
+
+        // Second test dataset
+        Leaderboard<Team> testBoard =
+            new Leaderboard<>(teamOrder);
+
+        testBoard.add(new Team("Tigers", 10, 5));
+        testBoard.add(new Team("Lions", 10, 7));
+        testBoard.add(new Team("Bears", 10, 5));
+
+        System.out.println("\nSecond Test:");
+        System.out.println(testBoard.ranking());
+    }
+}
