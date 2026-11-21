@@ -1,0 +1,52 @@
+class Main {
+    int count = 0;
+
+    synchronized void put() throws InterruptedException {
+        while (count == 5)
+            wait();
+
+        count++;
+        System.out.println("Token produced. Count: " + count);
+
+        notifyAll();
+    }
+
+    synchronized void take() throws InterruptedException {
+        while (count == 0)
+            wait();
+
+        count--;
+        System.out.println("Token consumed. Count: " + count);
+
+        notifyAll();
+    }
+
+    public static void main(String[] args) {
+
+        Main c = new Main();
+
+        System.out.println("MESS TOKEN COUNTER");
+        System.out.println("------------------");
+
+        Thread producer = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++)
+                    c.put();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumer = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++)
+                    c.take();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        producer.start();
+        consumer.start();
+    }
+}
