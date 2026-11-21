@@ -1,0 +1,19 @@
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+
+        List<Integer> files =
+                Arrays.asList(1, 2, 3, 4, 5);
+
+        System.out.println("PARALLEL FILE PROCESSING");
+        System.out.println("------------------------");
+
+        files.parallelStream().forEach(i -> {
+            System.out.println("Processing file: " + i);
+        });
+
+        System.out.println("All files processed.");
+        System.out.println("Result processing completed.");
+    }
+}
