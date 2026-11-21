@@ -1,0 +1,27 @@
+class Main {
+    static Object a = new Object();
+    static Object b = new Object();
+
+    static void transfer(String name) {
+        synchronized (a) {
+            System.out.println(name + " locked Account A");
+
+            synchronized (b) {
+                System.out.println(name + " locked Account B");
+                System.out.println(name + " money transferred");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println("HOSTEL WALLET TRANSFER");
+        System.out.println("----------------------");
+
+        Thread t1 = new Thread(() -> transfer("Student 1"));
+        Thread t2 = new Thread(() -> transfer("Student 2"));
+
+        t1.start();
+        t2.start();
+    }
+}
