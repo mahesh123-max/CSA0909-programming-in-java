@@ -1,0 +1,101 @@
+import java.util.*;
+
+public class Q2ListBenchmark {
+
+    static void test(int n) {
+
+        ArrayList<Integer> a = new ArrayList<>();
+        LinkedList<Integer> l = new LinkedList<>();
+        ArrayDeque<Integer> d = new ArrayDeque<>();
+
+        for (int i = 0; i < n; i++) {
+            a.add(i);
+            l.add(i);
+            d.add(i);
+        }
+
+        long start;
+
+        // Adding at end
+        start = System.nanoTime();
+        for (int i = 0; i < n; i++)
+            a.add(i);
+        long aEnd = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < n; i++)
+            l.add(i);
+        long lEnd = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < n; i++)
+            d.addLast(i);
+        long dEnd = System.nanoTime() - start;
+
+        // Adding at front
+        int count = Math.min(n, 3000);
+
+        start = System.nanoTime();
+        for (int i = 0; i < count; i++)
+            a.add(0, i);
+        long aFront = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < count; i++)
+            l.addFirst(i);
+        long lFront = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < count; i++)
+            d.addFirst(i);
+        long dFront = System.nanoTime() - start;
+
+        // Accessing elements
+        start = System.nanoTime();
+        for (int i = 0; i < 1000; i++)
+            a.get(i % a.size());
+        long aGet = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < 1000; i++)
+            l.get(i % l.size());
+        long lGet = System.nanoTime() - start;
+
+        // Removing front elements
+        start = System.nanoTime();
+        for (int i = 0; i < count; i++)
+            a.remove(0);
+        long aRemove = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < count; i++)
+            l.removeFirst();
+        long lRemove = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i < count; i++)
+            d.removeFirst();
+        long dRemove = System.nanoTime() - start;
+
+        System.out.println("\nPlaylist Size: " + n);
+
+        System.out.println("Add End (ms): " +
+                aEnd / 1e6 + " | " + lEnd / 1e6 + " | " + dEnd / 1e6);
+
+        System.out.println("Add Front (ms): " +
+                aFront / 1e6 + " | " + lFront / 1e6 + " | " + dFront / 1e6);
+
+        System.out.println("Get Element (ms): " +
+                aGet / 1e6 + " | " + lGet / 1e6);
+
+        System.out.println("Remove Front (ms): " +
+                aRemove / 1e6 + " | " + lRemove / 1e6 + " | " + dRemove / 1e6);
+    }
+
+    public static void main(String[] args) {
+
+        test(1000);
+        test(10000);
+        test(100000);
+    }
+}
