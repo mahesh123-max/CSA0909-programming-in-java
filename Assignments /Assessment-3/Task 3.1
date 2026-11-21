@@ -1,0 +1,39 @@
+import java.io.*;
+
+class Main {
+    public static void main(String[] args) {
+
+        BufferedReader br = null;
+
+        System.out.println("DAILY SALES REPORT");
+        System.out.println("------------------");
+
+        try {
+            br = new BufferedReader(
+                new FileReader("input.txt"));
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                System.out.println("Sales Data: " + line);
+            }
+
+            System.out.println("Report generated successfully.");
+
+        } catch (IOException e) {
+            System.out.println("File reading error.");
+
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                    System.out.println("File closed manually.");
+                }
+            } catch (IOException e) {
+                System.out.println("Closing error.");
+            }
+        }
+
+        System.out.println("Process completed.");
+    }
+}
